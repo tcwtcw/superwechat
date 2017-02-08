@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.ui.GuideActivity;
 import cn.ucai.superwechat.ui.LoginActivity;
 import cn.ucai.superwechat.ui.RegisterActivity;
+import cn.ucai.superwechat.ui.SplashActivity;
 
 
 /**
@@ -36,5 +38,9 @@ public class MFGT {
 
     public static void gotoRegister(Activity activity) {
         startActivity(activity, RegisterActivity.class);
+    }
+
+    public static void gotoGuide(SplashActivity activity) {
+        startActivity(activity, GuideActivity.class);
     }
 }
