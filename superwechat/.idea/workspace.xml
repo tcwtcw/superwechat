@@ -10,11 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9d3f2a7-6a5f-4086-95d5-bd5ac8c5111c" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/values-w820dp/dimens.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../easeui/EaseUI.iml" afterPath="$PROJECT_DIR$/../easeui/EaseUI.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/cn/ucai/superwechat/utils/MFGT.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/redpacketlibrary/redpacketlibrary.iml" afterPath="$PROJECT_DIR$/redpacketlibrary/redpacketlibrary.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/cn/ucai/superwechat/ui/GuideActivity.java" afterPath="$PROJECT_DIR$/src/cn/ucai/superwechat/ui/GuideActivity.java" />
     </list>
     <ignored path="superwechat.iws" />
@@ -51,8 +49,20 @@
       <file leaf-file-name="GuideActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cn/ucai/superwechat/ui/GuideActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+            <state relative-caret-position="305">
+              <caret line="19" column="49" selection-start-line="19" selection-start-column="49" selection-end-line="19" selection-end-column="49" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MFGT.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cn/ucai/superwechat/utils/MFGT.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="239">
+              <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -2447,13 +2457,14 @@
         <option value="$PROJECT_DIR$/src/cn/ucai/superwechat/ui/SplashActivity.java" />
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/src/cn/ucai/superwechat/utils/MFGT.java" />
         <option value="$PROJECT_DIR$/src/cn/ucai/superwechat/ui/GuideActivity.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="821" />
-    <option name="y" value="22" />
+    <option name="x" value="466" />
+    <option name="y" value="13" />
     <option name="width" value="1586" />
     <option name="height" value="844" />
   </component>
@@ -2483,78 +2494,7 @@
     </navigator>
     <panes>
       <pane id="AndroidView">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="superwechat" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="superwechat" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="superwechat" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="superwechat" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="superwechat" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="em_dimens.xml" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="superwechat" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="superwechat" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="superwechat" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="superwechat" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
+        <subPane />
       </pane>
       <pane id="Scope" />
       <pane id="ProjectPane">
@@ -2578,6 +2518,9 @@
   <component name="RecentsManager">
     <key name="android.template.packageName">
       <recent name="cn.ucai.superwechat.ui" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="cn.ucai.superwechat.utils" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\ws_android\superwechat\easeui" />
@@ -2939,7 +2882,14 @@
       <option name="project" value="LOCAL" />
       <updated>1486541907746</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="添加butterknife的依赖">
+      <created>1486542695264</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1486542695264</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2952,7 +2902,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="821" y="22" width="1586" height="844" extended-state="0" />
+    <frame x="466" y="13" width="1586" height="844" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -3008,7 +2958,8 @@
     <MESSAGE value="修改闪屏" />
     <MESSAGE value="修改demo为superwechat" />
     <MESSAGE value="添加欢迎界面" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加欢迎界面" />
+    <MESSAGE value="添加butterknife的依赖" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加butterknife的依赖" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -3258,10 +3209,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/cn/ucai/superwechat/utils/MFGT.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239">
+          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/cn/ucai/superwechat/ui/GuideActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        <state relative-caret-position="305">
+          <caret line="19" column="49" selection-start-line="19" selection-start-column="49" selection-end-line="19" selection-end-column="49" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
