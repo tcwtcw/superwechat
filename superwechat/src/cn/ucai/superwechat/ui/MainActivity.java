@@ -51,12 +51,15 @@ import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.runtimepermissions.PermissionsManager;
 import cn.ucai.superwechat.runtimepermissions.PermissionsResultAction;
+
+import com.hyphenate.easeui.domain.User;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
 import java.util.List;
+import java.util.Map;
 
 @SuppressLint("NewApi")
 public class MainActivity extends BaseActivity {
@@ -141,7 +144,11 @@ public class MainActivity extends BaseActivity {
 		EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
 		//debug purpose only
         registerInternalDebugReceiver();
-	}
+
+        String username = EMClient.getInstance().getCurrentUser();
+        Map<String, User> map = SuperWeChatHelper.getInstance().getAppContactList();
+
+    }
 
 	@TargetApi(23)
 	private void requestPermissions() {
