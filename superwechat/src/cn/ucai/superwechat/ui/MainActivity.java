@@ -145,7 +145,7 @@ public class MainActivity extends BaseActivity {
 		//debug purpose only
         registerInternalDebugReceiver();
 
-        String username = EMClient.getInstance().getCurrentUser();
+        EMClient.getInstance().getCurrentUser()
         Map<String, User> map = SuperWeChatHelper.getInstance().getAppContactList();
 
     }
