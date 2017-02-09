@@ -19,6 +19,8 @@ import com.hyphenate.easeui.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.value;
+
 public class UserProfileManager {
 
     /**
@@ -153,8 +155,8 @@ public class UserProfileManager {
             @Override
             public void onSuccess(EaseUser value) {
                 if (value != null) {
-                    setCurrentUserNick(value.getNick());
-                    setCurrentUserAvatar(value.getAvatar());
+//                    setCurrentUserNick(value.getNick());
+//                    setCurrentUserAvatar(value.getAvatar());
                 }
             }
 
@@ -169,7 +171,10 @@ public class UserProfileManager {
                 if (s != null) {
                     Result result = ResultUtils.getResultFromJson(s, User.class);
                     if (result != null && result.isRetMsg()) {
+                        User user =(User) result.getRetData();
                         //save user info to db
+                        setCurrentUserNick(user.getMUserNick());
+//                        setCurrentUserAvatar(value.getAvatar());
                     }
                 }
             }
