@@ -460,8 +460,6 @@ public class SuperWeChatDBManager {
         values.put(UserDao.USER_COLUMN_NAME, user.getMUserName());
         if (user.getMUserNick() != null)
             values.put(UserDao.USER_COLUMN_NAME_NICK, user.getMUserNick());
-        if (user.getAvatar() != null)
-            values.put(UserDao.COLUMN_NAME_AVATAR, user.getAvatar());
         if (user.getMAvatarId() != null)
             values.put(UserDao.USER_COLUMN_NAME_AVATAR_ID, user.getMAvatarId());
         if (user.getMAvatarPath() != null)
