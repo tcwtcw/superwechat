@@ -18,7 +18,7 @@ public class MyChronometer extends Chronometer{
     public MyChronometer(Context context) {
         super(context);
     }
-    
+
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         //continue when view is hidden

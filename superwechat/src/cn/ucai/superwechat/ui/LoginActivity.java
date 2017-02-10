@@ -30,30 +30,24 @@ import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.easeui.domain.User;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.db.SuperWeChatDBManager;
-import cn.ucai.superwechat.domain.Result;
-import cn.ucai.superwechat.net.NetDao;
-import cn.ucai.superwechat.utils.CommonUtils;
 import cn.ucai.superwechat.utils.MD5;
 import cn.ucai.superwechat.utils.MFGT;
-import cn.ucai.superwechat.utils.OkHttpUtils;
-import cn.ucai.superwechat.utils.ResultUtils;
 
 /**
  * Login screen
+ *
  */
 public class LoginActivity extends BaseActivity {
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = LoginActivity.class.getSimpleName();
     public static final int REQUEST_CODE_SETNICK = 1;
     @BindView(R.id.img_back)
     ImageView mImgBack;
@@ -63,12 +57,13 @@ public class LoginActivity extends BaseActivity {
     EditText mEtUsername;
     @BindView(R.id.et_password)
     EditText mEtPassword;
-    ProgressDialog pd;
-    String currentUsername ;
-    String currentPassword ;
 
     private boolean progressShow;
     private boolean autoLogin = false;
+
+    ProgressDialog pd;
+    String currentUsername;
+    String currentPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +73,7 @@ public class LoginActivity extends BaseActivity {
         if (SuperWeChatHelper.getInstance().isLoggedIn()) {
             autoLogin = true;
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
             return;
         }
         setContentView(R.layout.em_activity_login);
@@ -87,6 +83,7 @@ public class LoginActivity extends BaseActivity {
         mTxtTitle.setText(R.string.login);
 
         setListener();
+
     }
 
     private void setListener() {
@@ -143,7 +140,8 @@ public class LoginActivity extends BaseActivity {
         pd.setMessage(getString(R.string.Is_landing));
         pd.show();
 
-        // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
+        // After logout，the DemoDB may still be accessed due to async callback,
+        // so the DemoDB will be re-opened again.
         // close it before login to make sure DemoDB not overlap
         SuperWeChatDBManager.getInstance().closeDB();
 
@@ -153,7 +151,6 @@ public class LoginActivity extends BaseActivity {
         final long start = System.currentTimeMillis();
         loginEMServer();
     }
-
 
     private void loginEMServer() {
         // call login method
@@ -165,7 +162,6 @@ public class LoginActivity extends BaseActivity {
                 Log.d(TAG, "login: onSuccess");
 
                 loginSuccess();
-
             }
 
             @Override

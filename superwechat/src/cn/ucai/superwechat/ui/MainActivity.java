@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity {
         // runtime permission for android 6.0, just require all permissions here for simple
         requestPermissions();
 
-//        initView();
+        initView();
         initUment();
         showExceptionDialogFromIntent(getIntent());
 
@@ -174,7 +174,7 @@ public class MainActivity extends BaseActivity {
     /**
      * init views
      */
-//    private void initView() {
+    private void initView() {
 //		unreadLabel = (TextView) findViewById(R.id.unread_msg_number);
 //		unreadAddressLable = (TextView) findViewById(R.id.unread_address_number);
 //		mTabs = new Button[3];
@@ -183,7 +183,7 @@ public class MainActivity extends BaseActivity {
 //		mTabs[2] = (Button) findViewById(R.id.btn_setting);
 //		// select first tab
 //		mTabs[0].setSelected(true);
-//    }
+    }
 
     /**
      * on tab clicked

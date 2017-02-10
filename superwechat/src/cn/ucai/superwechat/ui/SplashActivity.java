@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.util.EasyUtils;
+
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.utils.MFGT;
-
-import com.hyphenate.util.EasyUtils;
 
 /**
  * 开屏页
@@ -22,7 +22,6 @@ public class SplashActivity extends BaseActivity {
 	protected void onCreate(Bundle arg0) {
 		setContentView(R.layout.em_activity_splash);
 		super.onCreate(arg0);
-
 	}
 
 	@Override
@@ -66,11 +65,11 @@ public class SplashActivity extends BaseActivity {
 		}).start();
 
 	}
-	
+
 	/**
 	 * get sdk version
 	 */
 	private String getVersion() {
-	    return EMClient.getInstance().VERSION;
+		return EMClient.getInstance().VERSION;
 	}
 }

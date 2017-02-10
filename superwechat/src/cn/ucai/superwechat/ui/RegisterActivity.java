@@ -36,6 +36,7 @@ import cn.ucai.superwechat.domain.Result;
 import cn.ucai.superwechat.net.NetDao;
 import cn.ucai.superwechat.net.OnCompleteListener;
 import cn.ucai.superwechat.utils.CommonUtils;
+import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.MD5;
 import cn.ucai.superwechat.utils.MFGT;
 import cn.ucai.superwechat.utils.ResultUtils;
@@ -44,6 +45,7 @@ import cn.ucai.superwechat.utils.ResultUtils;
  * register screen
  */
 public class RegisterActivity extends BaseActivity {
+    private static final String TAG = RegisterActivity.class.getSimpleName();
     @BindView(R.id.et_username)
     EditText mEtUsername;
     @BindView(R.id.et_nickname)
@@ -99,17 +101,17 @@ public class RegisterActivity extends BaseActivity {
             pd.setMessage(getResources().getString(R.string.Is_the_registered));
             pd.show();
 
-            registerAppServer();
+            registerAppSever();
 
         }
-
     }
 
-    private void registerAppServer() {
+    private void registerAppSever() {
         //注册自己的服务器的账号
         NetDao.register(this, username, usernick, pwd, new OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
+                L.e(TAG, "register,s=" + s);
                 if (s != null) {
                     Result result = ResultUtils.getResultFromJson(s, null);
                     if (result != null) {
@@ -138,9 +140,9 @@ public class RegisterActivity extends BaseActivity {
             public void onError(String error) {
                 pd.dismiss();
                 CommonUtils.showShortToast(R.string.Registration_failed);
+                L.e(TAG, "error=" + error);
             }
         });
-
     }
 
     private void registerEMServer() {
@@ -161,7 +163,7 @@ public class RegisterActivity extends BaseActivity {
                     });
                 } catch (final HyphenateException e) {
                     //取消注册
-                    unRegisterAppServer();
+                    unRegisterAppSever();
                     runOnUiThread(new Runnable() {
                         public void run() {
                             if (!RegisterActivity.this.isFinishing())
@@ -185,20 +187,19 @@ public class RegisterActivity extends BaseActivity {
         }).start();
     }
 
-    private void unRegisterAppServer() {
+    private void unRegisterAppSever() {
         NetDao.unRegister(this, username, new OnCompleteListener<String>() {
             @Override
             public void onSuccess(String result) {
-
+                L.e(TAG, "result=" + result);
             }
 
             @Override
             public void onError(String error) {
-
+                L.e(TAG, "error=" + error);
             }
         });
     }
-
 
     @OnClick({R.id.img_back, R.id.btn_register})
     public void onClick(View view) {

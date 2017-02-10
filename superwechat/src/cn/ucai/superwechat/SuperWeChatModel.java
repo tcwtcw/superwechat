@@ -2,9 +2,6 @@ package cn.ucai.superwechat;
 
 import android.content.Context;
 
-import cn.ucai.superwechat.db.UserDao;
-import cn.ucai.superwechat.domain.RobotUser;
-import cn.ucai.superwechat.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.domain.User;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
@@ -14,16 +11,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.ucai.superwechat.db.UserDao;
+import cn.ucai.superwechat.domain.RobotUser;
+import cn.ucai.superwechat.utils.PreferenceManager;
+
 public class SuperWeChatModel {
     UserDao dao = null;
     protected Context context = null;
     protected Map<Key,Object> valueCache = new HashMap<Key,Object>();
-    
+
     public SuperWeChatModel(Context ctx){
         context = ctx;
         PreferenceManager.init(context);
     }
-    
+
     public boolean saveContactList(List<EaseUser> contactList) {
         UserDao dao = new UserDao(context);
         dao.saveContactList(contactList);
@@ -34,12 +35,12 @@ public class SuperWeChatModel {
         UserDao dao = new UserDao(context);
         return dao.getContactList();
     }
-    
+
     public void saveContact(EaseUser user){
         UserDao dao = new UserDao(context);
         dao.saveContact(user);
     }
-    
+
     /**
      * save current username
      * @param username
@@ -51,7 +52,7 @@ public class SuperWeChatModel {
     public String getCurrentUsernName(){
         return PreferenceManager.getInstance().getCurrentUsername();
     }
-    
+
     public Map<String, RobotUser> getRobotList(){
         UserDao dao = new UserDao(context);
         return dao.getRobotUser();
@@ -62,7 +63,7 @@ public class SuperWeChatModel {
         dao.saveRobotUser(robotList);
         return true;
     }
-    
+
     public void setSettingMsgNotification(boolean paramBoolean) {
         PreferenceManager.getInstance().setSettingMsgNotification(paramBoolean);
         valueCache.put(Key.VibrateAndPlayToneOn, paramBoolean);
@@ -75,7 +76,7 @@ public class SuperWeChatModel {
             val = PreferenceManager.getInstance().getSettingMsgNotification();
             valueCache.put(Key.VibrateAndPlayToneOn, val);
         }
-       
+
         return (Boolean) (val != null?val:true);
     }
 
@@ -91,7 +92,7 @@ public class SuperWeChatModel {
             val = PreferenceManager.getInstance().getSettingMsgSound();
             valueCache.put(Key.PlayToneOn, val);
         }
-       
+
         return (Boolean) (val != null?val:true);
     }
 
@@ -107,7 +108,7 @@ public class SuperWeChatModel {
             val = PreferenceManager.getInstance().getSettingMsgVibrate();
             valueCache.put(Key.VibrateOn, val);
         }
-       
+
         return (Boolean) (val != null?val:true);
     }
 
@@ -116,14 +117,14 @@ public class SuperWeChatModel {
         valueCache.put(Key.SpakerOn, paramBoolean);
     }
 
-    public boolean getSettingMsgSpeaker() {        
+    public boolean getSettingMsgSpeaker() {
         Object val = valueCache.get(Key.SpakerOn);
 
         if(val == null){
             val = PreferenceManager.getInstance().getSettingMsgSpeaker();
             valueCache.put(Key.SpakerOn, val);
         }
-       
+
         return (Boolean) (val != null?val:true);
     }
 
@@ -132,7 +133,7 @@ public class SuperWeChatModel {
         if(dao == null){
             dao = new UserDao(context);
         }
-        
+
         List<String> list = new ArrayList<String>();
         list.addAll(groups);
         for(int i = 0; i < list.size(); i++){
@@ -145,14 +146,14 @@ public class SuperWeChatModel {
         dao.setDisabledGroups(list);
         valueCache.put(Key.DisabledGroups, list);
     }
-    
+
     public List<String> getDisabledGroups(){
         Object val = valueCache.get(Key.DisabledGroups);
 
         if(dao == null){
             dao = new UserDao(context);
         }
-        
+
         if(val == null){
             val = dao.getDisabledGroups();
             valueCache.put(Key.DisabledGroups, val);
@@ -161,19 +162,19 @@ public class SuperWeChatModel {
         //noinspection unchecked
         return (List<String>) val;
     }
-    
+
     public void setDisabledIds(List<String> ids){
         if(dao == null){
             dao = new UserDao(context);
         }
-        
+
         dao.setDisabledIds(ids);
         valueCache.put(Key.DisabledIds, ids);
     }
-    
+
     public List<String> getDisabledIds(){
         Object val = valueCache.get(Key.DisabledIds);
-        
+
         if(dao == null){
             dao = new UserDao(context);
         }
@@ -186,60 +187,60 @@ public class SuperWeChatModel {
         //noinspection unchecked
         return (List<String>) val;
     }
-    
+
     public void setGroupsSynced(boolean synced){
         PreferenceManager.getInstance().setGroupsSynced(synced);
     }
-    
+
     public boolean isGroupsSynced(){
         return PreferenceManager.getInstance().isGroupsSynced();
     }
-    
+
     public void setContactSynced(boolean synced){
         PreferenceManager.getInstance().setContactSynced(synced);
     }
-    
+
     public boolean isContactSynced(){
         return PreferenceManager.getInstance().isContactSynced();
     }
-    
+
     public void setBlacklistSynced(boolean synced){
         PreferenceManager.getInstance().setBlacklistSynced(synced);
     }
-    
+
     public boolean isBacklistSynced(){
         return PreferenceManager.getInstance().isBacklistSynced();
     }
-    
+
     public void allowChatroomOwnerLeave(boolean value){
         PreferenceManager.getInstance().setSettingAllowChatroomOwnerLeave(value);
     }
-    
+
     public boolean isChatroomOwnerLeaveAllowed(){
         return PreferenceManager.getInstance().getSettingAllowChatroomOwnerLeave();
     }
-   
+
     public void setDeleteMessagesAsExitGroup(boolean value) {
         PreferenceManager.getInstance().setDeleteMessagesAsExitGroup(value);
     }
-    
+
     public boolean isDeleteMessagesAsExitGroup() {
         return PreferenceManager.getInstance().isDeleteMessagesAsExitGroup();
     }
-    
+
     public void setAutoAcceptGroupInvitation(boolean value) {
         PreferenceManager.getInstance().setAutoAcceptGroupInvitation(value);
     }
-    
+
     public boolean isAutoAcceptGroupInvitation() {
         return PreferenceManager.getInstance().isAutoAcceptGroupInvitation();
     }
-    
+
 
     public void setAdaptiveVideoEncode(boolean value) {
         PreferenceManager.getInstance().setAdaptiveVideoEncode(value);
     }
-    
+
     public boolean isAdaptiveVideoEncode() {
         return PreferenceManager.getInstance().isAdaptiveVideoEncode();
     }
@@ -300,6 +301,7 @@ public class SuperWeChatModel {
         DisabledGroups,
         DisabledIds
     }
+
     public boolean saveAppContactList(List<User> contactList) {
         UserDao dao = new UserDao(context);
         dao.saveAppContactList(contactList);

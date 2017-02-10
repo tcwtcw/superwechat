@@ -25,7 +25,7 @@ public class SuperWeChatApplication extends Application {
 	private static SuperWeChatApplication instance;
 	// login user name
 	public final String PREF_USERNAME = "username";
-	
+
 	/**
 	 * nickname for current user, the nickname instead of ID be shown when user receive notification from APNs
 	 */
@@ -35,11 +35,11 @@ public class SuperWeChatApplication extends Application {
 	public void onCreate() {
 		MultiDex.install(this);
 		super.onCreate();
-        applicationContext = this;
-        instance = this;
-        
-        //init demo helper
-        SuperWeChatHelper.getInstance().init(applicationContext);
+		applicationContext = this;
+		instance = this;
+
+		//init demo helper
+		SuperWeChatHelper.getInstance().init(applicationContext);
 		//red packet code : 初始化红包上下文，开启日志输出开关
 		RedPacket.getInstance().initContext(applicationContext);
 		RedPacket.getInstance().setDebugMode(true);
