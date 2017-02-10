@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,7 @@ package cn.ucai.superwechat.ui;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,12 +25,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,22 +54,37 @@ import com.umeng.update.UmengUpdateAgent;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
+import cn.ucai.superwechat.adapter.MainTabAdpter;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.runtimepermissions.PermissionsManager;
 import cn.ucai.superwechat.runtimepermissions.PermissionsResultAction;
+import cn.ucai.superwechat.widget.DMTabHost;
+import cn.ucai.superwechat.widget.MFViewPager;
 
 @SuppressLint("NewApi")
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements  DMTabHost.OnCheckedChangeListener,ViewPager.OnPageChangeListener{
 
     protected static final String TAG = "MainActivity";
-    // textview for unread message count
+    @BindView(R.id.txt_left)
+    TextView mTxtLeft;
+    @BindView(R.id.img_right)
+    ImageView mImgRight;
+    @BindView(R.id.layout_viewpage)
+    MFViewPager mLayoutViewpage;
+    @BindView(R.id.layout_tabhost)
+    DMTabHost mLayoutTabhost;
+/*    // textview for unread message count
     private TextView unreadLabel;
     // textview for unread event message
     private TextView unreadAddressLable;
+ */
 
     private Button[] mTabs;
     private ContactListFragment contactListFragment;
@@ -76,6 +95,8 @@ public class MainActivity extends BaseActivity {
     public boolean isConflict = false;
     // user account was removed
     private boolean isCurrentAccountRemoved = false;
+
+    MainTabAdpter adpter;
 
 
     /**
@@ -92,6 +113,7 @@ public class MainActivity extends BaseActivity {
         checkAccount(savedInstanceState);
 
         setContentView(R.layout.em_activity_main);
+        ButterKnife.bind(this);
         // runtime permission for android 6.0, just require all permissions here for simple
         requestPermissions();
 
@@ -115,11 +137,20 @@ public class MainActivity extends BaseActivity {
         conversationListFragment = new ConversationListFragment();
         contactListFragment = new ContactListFragment();
         SettingsFragment settingFragment = new SettingsFragment();
-        fragments = new Fragment[] { conversationListFragment, contactListFragment, settingFragment};
+        fragments = new Fragment[]{conversationListFragment, contactListFragment, settingFragment};
 
 //		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, conversationListFragment)
 //				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(conversationListFragment)
 //				.commit();
+        adpter = new MainTabAdpter(getSupportFragmentManager());
+        adpter.addFragment(conversationListFragment,"微信");
+        adpter.addFragment(contactListFragment,"通讯录");
+        adpter.addFragment(new DiscoverFragment(),"发现");
+        adpter.addFragment(settingFragment,"我");
+        mLayoutViewpage.setAdapter(adpter);
+        mLayoutTabhost.setChecked(0);
+        mLayoutTabhost.setOnCheckedChangeListener(this);
+        mLayoutViewpage.setOnPageChangeListener(this);
     }
 
     private void initUment() {
@@ -132,7 +163,7 @@ public class MainActivity extends BaseActivity {
     private void checkAccount(Bundle savedInstanceState) {
         //make sure activity will not in background if user is logged into another device or removed
         if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
-            SuperWeChatHelper.getInstance().logout(false,null);
+            SuperWeChatHelper.getInstance().logout(false, null);
             finish();
             startActivity(new Intent(this, LoginActivity.class));
             return;
@@ -144,12 +175,12 @@ public class MainActivity extends BaseActivity {
     }
 
     private void savePower() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String packageName = getPackageName();
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             if (!pm.isIgnoringBatteryOptimizations(packageName)) {
                 Intent intent = new Intent();
-                intent.setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
                 intent.setData(Uri.parse("package:" + packageName));
                 startActivity(intent);
             }
@@ -183,6 +214,8 @@ public class MainActivity extends BaseActivity {
 //		mTabs[2] = (Button) findViewById(R.id.btn_setting);
 //		// select first tab
 //		mTabs[0].setSelected(true);
+        mTxtLeft.setVisibility(View.VISIBLE);
+        mImgRight.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -250,7 +283,8 @@ public class MainActivity extends BaseActivity {
         }
 
         @Override
-        public void onMessageChanged(EMMessage message, Object change) {}
+        public void onMessageChanged(EMMessage message, Object change) {
+        }
     };
 
     private void refreshUIWithMessage() {
@@ -291,19 +325,19 @@ public class MainActivity extends BaseActivity {
                         conversationListFragment.refresh();
                     }
                 } else if (currentTabIndex == 1) {
-                    if(contactListFragment != null) {
+                    if (contactListFragment != null) {
                         contactListFragment.refresh();
                     }
                 }
                 String action = intent.getAction();
-                if(action.equals(Constant.ACTION_GROUP_CHANAGED)){
+                if (action.equals(Constant.ACTION_GROUP_CHANAGED)) {
                     if (EaseCommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
                         GroupsActivity.instance.onResume();
                     }
                 }
                 //red packet code : 处理红包回执透传消息
-                if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
-                    if (conversationListFragment != null){
+                if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
+                    if (conversationListFragment != null) {
                         conversationListFragment.refresh();
                     }
                 }
@@ -313,9 +347,36 @@ public class MainActivity extends BaseActivity {
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
 
+    @OnClick(R.id.txt_right)
+    public void onClick() {
+    }
+
+    @Override
+    public void onPageScrolled(int i, float v, int i1) {
+
+    }
+
+    @Override
+    public void onPageSelected(int i) {
+//        mLayoutViewpage.setCurrentItem(i);
+        mLayoutTabhost.setChecked(i);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
+
+    }
+
+    @Override
+    public void onCheckedChange(int checkedPosition, boolean byUser) {
+        mLayoutViewpage.setCurrentItem(checkedPosition,false);
+    }
+
     public class MyContactListener implements EMContactListener {
         @Override
-        public void onContactAdded(String username) {}
+        public void onContactAdded(String username) {
+        }
+
         @Override
         public void onContactDeleted(final String username) {
             runOnUiThread(new Runnable() {
@@ -330,15 +391,21 @@ public class MainActivity extends BaseActivity {
                 }
             });
         }
+
         @Override
-        public void onContactInvited(String username, String reason) {}
+        public void onContactInvited(String username, String reason) {
+        }
+
         @Override
-        public void onFriendRequestAccepted(String username) {}
+        public void onFriendRequestAccepted(String username) {
+        }
+
         @Override
-        public void onFriendRequestDeclined(String username) {}
+        public void onFriendRequestDeclined(String username) {
+        }
     }
 
-    private void unregisterBroadcastReceiver(){
+    private void unregisterBroadcastReceiver() {
         broadcastManager.unregisterReceiver(broadcastReceiver);
     }
 
@@ -365,28 +432,29 @@ public class MainActivity extends BaseActivity {
      */
     public void updateUnreadLabel() {
         int count = getUnreadMsgCountTotal();
-        if (count > 0) {
+    /*    if (count > 0) {
             unreadLabel.setText(String.valueOf(count));
             unreadLabel.setVisibility(View.VISIBLE);
         } else {
             unreadLabel.setVisibility(View.INVISIBLE);
         }
+     */
     }
 
     /**
      * update the total unread count
      */
     public void updateUnreadAddressLable() {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                int count = getUnreadAddressCountTotal();
-                if (count > 0) {
-                    unreadAddressLable.setVisibility(View.VISIBLE);
-                } else {
-                    unreadAddressLable.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+//        runOnUiThread(new Runnable() {
+//            public void run() {
+//                int count = getUnreadAddressCountTotal();
+//                if (count > 0) {
+//                    unreadAddressLable.setVisibility(View.VISIBLE);
+//                } else {
+//                    unreadAddressLable.setVisibility(View.INVISIBLE);
+//                }
+//            }
+//        });
 
     }
 
@@ -410,11 +478,11 @@ public class MainActivity extends BaseActivity {
         int unreadMsgCountTotal = 0;
         int chatroomUnreadMsgCount = 0;
         unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMessageCount();
-        for(EMConversation conversation:EMClient.getInstance().chatManager().getAllConversations().values()){
-            if(conversation.getType() == EMConversationType.ChatRoom)
-                chatroomUnreadMsgCount=chatroomUnreadMsgCount+conversation.getUnreadMsgCount();
+        for (EMConversation conversation : EMClient.getInstance().chatManager().getAllConversations().values()) {
+            if (conversation.getType() == EMConversationType.ChatRoom)
+                chatroomUnreadMsgCount = chatroomUnreadMsgCount + conversation.getUnreadMsgCount();
         }
-        return unreadMsgCountTotal-chatroomUnreadMsgCount;
+        return unreadMsgCountTotal - chatroomUnreadMsgCount;
     }
 
     private InviteMessgeDao inviteMessgeDao;
@@ -461,15 +529,15 @@ public class MainActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private android.app.AlertDialog.Builder exceptionBuilder;
-    private boolean isExceptionDialogShow =  false;
+    private AlertDialog.Builder exceptionBuilder;
+    private boolean isExceptionDialogShow = false;
     private BroadcastReceiver internalDebugReceiver;
     private ConversationListFragment conversationListFragment;
     private BroadcastReceiver broadcastReceiver;
     private LocalBroadcastManager broadcastManager;
 
     private int getExceptionMessageId(String exceptionType) {
-        if(exceptionType.equals(Constant.ACCOUNT_CONFLICT)) {
+        if (exceptionType.equals(Constant.ACCOUNT_CONFLICT)) {
             return R.string.connect_conflict;
         } else if (exceptionType.equals(Constant.ACCOUNT_REMOVED)) {
             return R.string.em_user_remove;
@@ -478,18 +546,19 @@ public class MainActivity extends BaseActivity {
         }
         return R.string.Network_error;
     }
+
     /**
      * show the dialog when user met some exception: such as login on another device, user removed or user forbidden
      */
     private void showExceptionDialog(String exceptionType) {
         isExceptionDialogShow = true;
-        SuperWeChatHelper.getInstance().logout(false,null);
+        SuperWeChatHelper.getInstance().logout(false, null);
         String st = getResources().getString(R.string.Logoff_notification);
         if (!MainActivity.this.isFinishing()) {
             // clear up global variables
             try {
                 if (exceptionBuilder == null)
-                    exceptionBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+                    exceptionBuilder = new AlertDialog.Builder(MainActivity.this);
                 exceptionBuilder.setTitle(st);
                 exceptionBuilder.setMessage(getExceptionMessageId(exceptionType));
                 exceptionBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -539,7 +608,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                SuperWeChatHelper.getInstance().logout(false,new EMCallBack() {
+                SuperWeChatHelper.getInstance().logout(false, new EMCallBack() {
 
                     @Override
                     public void onSuccess() {
@@ -552,10 +621,12 @@ public class MainActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onProgress(int progress, String status) {}
+                    public void onProgress(int progress, String status) {
+                    }
 
                     @Override
-                    public void onError(int code, String message) {}
+                    public void onError(int code, String message) {
+                    }
                 });
             }
         };
