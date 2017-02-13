@@ -97,7 +97,7 @@ public class ProfileFragment extends Fragment {
                 RedPacketUtil.startChangeActivity(getActivity());
                 break;
             case R.id.tv_profile_settings:
-                MFGT.gotoSetting(getActivity());
+                MFGT.gotoSettings(getActivity());
                 break;
         }
     }

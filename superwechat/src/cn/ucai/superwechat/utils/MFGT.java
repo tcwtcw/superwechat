@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.ui.AddContactActivity;
 import cn.ucai.superwechat.ui.GuideActivity;
 import cn.ucai.superwechat.ui.LoginActivity;
 import cn.ucai.superwechat.ui.RegisterActivity;
@@ -49,11 +50,15 @@ public class MFGT {
         startActivity(activity, GuideActivity.class);
     }
 
-    public static void gotoSetting(FragmentActivity activity) {
+    public static void gotoSettings(FragmentActivity activity) {
         startActivity(activity, SettingsActivity.class);
     }
 
     public static void gotoUserProfile(Activity activity) {
         startActivity(activity, UserProfileActivity.class);
+    }
+
+    public static void gotoAddContact(Activity activity){
+        startActivity(activity, AddContactActivity.class);
     }
 }

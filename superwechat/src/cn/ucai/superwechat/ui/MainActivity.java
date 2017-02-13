@@ -32,6 +32,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -65,11 +66,15 @@ import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.runtimepermissions.PermissionsManager;
 import cn.ucai.superwechat.runtimepermissions.PermissionsResultAction;
+import cn.ucai.superwechat.utils.L;
+import cn.ucai.superwechat.utils.MFGT;
 import cn.ucai.superwechat.widget.DMTabHost;
 import cn.ucai.superwechat.widget.MFViewPager;
+import cn.ucai.superwechat.widget.TitleMenu.ActionItem;
+import cn.ucai.superwechat.widget.TitleMenu.TitlePopup;
 
 @SuppressLint("NewApi")
-public class MainActivity extends BaseActivity implements  DMTabHost.OnCheckedChangeListener,ViewPager.OnPageChangeListener{
+public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedChangeListener,ViewPager.OnPageChangeListener {
 
     protected static final String TAG = "MainActivity";
     @BindView(R.id.txt_left)
@@ -80,11 +85,10 @@ public class MainActivity extends BaseActivity implements  DMTabHost.OnCheckedCh
     MFViewPager mLayoutViewpage;
     @BindView(R.id.layout_tabhost)
     DMTabHost mLayoutTabhost;
-/*    // textview for unread message count
-    private TextView unreadLabel;
+    // textview for unread message count
+    //private TextView unreadLabel;
     // textview for unread event message
-    private TextView unreadAddressLable;
- */
+    //private TextView unreadAddressLable;
 
     private Button[] mTabs;
     private ContactListFragment contactListFragment;
@@ -96,8 +100,8 @@ public class MainActivity extends BaseActivity implements  DMTabHost.OnCheckedCh
     // user account was removed
     private boolean isCurrentAccountRemoved = false;
 
-    MainTabAdpter adpter;
-
+    MainTabAdpter adapter;
+    TitlePopup mTitlePopup;
 
     /**
      * check if current user account was remove
@@ -137,12 +141,13 @@ public class MainActivity extends BaseActivity implements  DMTabHost.OnCheckedCh
         conversationListFragment = new ConversationListFragment();
         contactListFragment = new ContactListFragment();
         ProfileFragment profileFragment = new ProfileFragment();
-        adpter = new MainTabAdpter(getSupportFragmentManager());
-        adpter.addFragment(conversationListFragment,"微信");
-        adpter.addFragment(contactListFragment,"通讯录");
-        adpter.addFragment(new DiscoverFragment(),"发现");
-        adpter.addFragment(profileFragment,"我");
-        mLayoutViewpage.setAdapter(adpter);
+
+        adapter = new MainTabAdpter(getSupportFragmentManager());
+        adapter.addFragment(conversationListFragment,"微信");
+        adapter.addFragment(contactListFragment,"通讯录");
+        adapter.addFragment(new DiscoverFragment(),"发现");
+        adapter.addFragment(profileFragment,"我");
+        mLayoutViewpage.setAdapter(adapter);
         mLayoutTabhost.setChecked(0);
         mLayoutTabhost.setOnCheckedChangeListener(this);
         mLayoutViewpage.setOnPageChangeListener(this);
@@ -211,7 +216,26 @@ public class MainActivity extends BaseActivity implements  DMTabHost.OnCheckedCh
 //		mTabs[0].setSelected(true);
         mTxtLeft.setVisibility(View.VISIBLE);
         mImgRight.setVisibility(View.VISIBLE);
+        mTitlePopup = new TitlePopup(this, ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        mTitlePopup.addAction(new ActionItem(this,R.string.menu_groupchat,R.drawable.icon_menu_group));
+        mTitlePopup.addAction(new ActionItem(this,R.string.menu_addfriend,R.drawable.icon_menu_addfriend));
+        mTitlePopup.addAction(new ActionItem(this,R.string.menu_qrcode,R.drawable.icon_menu_sao));
+        mTitlePopup.addAction(new ActionItem(this,R.string.menu_money,R.drawable.icon_menu_money));
+        mTitlePopup.setItemOnClickListener(listener);
     }
+
+    TitlePopup.OnItemOnClickListener listener = new TitlePopup.OnItemOnClickListener() {
+        @Override
+        public void onItemClick(ActionItem item, int position) {
+            L.e(TAG,"item="+item+",position="+position);
+            switch (position){
+                case 1:
+                    MFGT.gotoAddContact(MainActivity.this);
+                    break;
+            }
+        }
+    } ;
 
     /**
      * on tab clicked
@@ -342,8 +366,9 @@ public class MainActivity extends BaseActivity implements  DMTabHost.OnCheckedCh
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
 
-    @OnClick(R.id.txt_right)
-    public void onClick() {
+    @OnClick(R.id.img_right)
+    public void showPupo() {
+        mTitlePopup.show(findViewById(R.id.layout_title));
     }
 
     @Override
@@ -353,7 +378,6 @@ public class MainActivity extends BaseActivity implements  DMTabHost.OnCheckedCh
 
     @Override
     public void onPageSelected(int i) {
-//        mLayoutViewpage.setCurrentItem(i);
         mLayoutTabhost.setChecked(i);
     }
 
@@ -427,29 +451,28 @@ public class MainActivity extends BaseActivity implements  DMTabHost.OnCheckedCh
      */
     public void updateUnreadLabel() {
         int count = getUnreadMsgCountTotal();
-    /*    if (count > 0) {
-            unreadLabel.setText(String.valueOf(count));
-            unreadLabel.setVisibility(View.VISIBLE);
-        } else {
-            unreadLabel.setVisibility(View.INVISIBLE);
-        }
-     */
+//		if (count > 0) {
+//			unreadLabel.setText(String.valueOf(count));
+//			unreadLabel.setVisibility(View.VISIBLE);
+//		} else {
+//			unreadLabel.setVisibility(View.INVISIBLE);
+//		}
     }
 
     /**
      * update the total unread count
      */
     public void updateUnreadAddressLable() {
-//        runOnUiThread(new Runnable() {
-//            public void run() {
-//                int count = getUnreadAddressCountTotal();
-//                if (count > 0) {
-//                    unreadAddressLable.setVisibility(View.VISIBLE);
-//                } else {
-//                    unreadAddressLable.setVisibility(View.INVISIBLE);
-//                }
-//            }
-//        });
+//		runOnUiThread(new Runnable() {
+//			public void run() {
+//				int count = getUnreadAddressCountTotal();
+//				if (count > 0) {
+//					unreadAddressLable.setVisibility(View.VISIBLE);
+//				} else {
+//					unreadAddressLable.setVisibility(View.INVISIBLE);
+//				}
+//			}
+//		});
 
     }
 
