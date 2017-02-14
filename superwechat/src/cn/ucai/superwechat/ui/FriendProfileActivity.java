@@ -20,7 +20,7 @@ import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.MFGT;
 
-public class FriendProfileActivity extends Activity {
+public class FriendProfileActivity extends BaseActivity {
     private static final String TAG = FriendProfileActivity.class.getSimpleName();
 
     @BindView(R.id.img_back)
@@ -53,7 +53,7 @@ public class FriendProfileActivity extends Activity {
         mImgBack.setVisibility(View.VISIBLE);
         mTxtTitle.setVisibility(View.VISIBLE);
         mTxtTitle.setText(R.string.userinfo_txt_profile);
-         user = (User) getIntent().getSerializableExtra(I.User.USER_NAME);
+        user = (User) getIntent().getSerializableExtra(I.User.USER_NAME);
         L.e(TAG, "user=" + user);
         if (user != null) {
             showUserInfo();
@@ -91,6 +91,7 @@ public class FriendProfileActivity extends Activity {
                 MFGT.finish(this);
                 break;
             case R.id.btn_add_contact:
+                MFGT.gotoAddFirent(this,user.getMUserName());
                 break;
             case R.id.btn_send_msg:
                 break;
