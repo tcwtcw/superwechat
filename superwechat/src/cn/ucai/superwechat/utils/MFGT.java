@@ -9,7 +9,7 @@ import com.hyphenate.easeui.domain.User;
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.ui.AddContactActivity;
-import cn.ucai.superwechat.ui.AddFirentActivity;
+import cn.ucai.superwechat.ui.FirentProfileActivity;
 import cn.ucai.superwechat.ui.FriendProfileActivity;
 import cn.ucai.superwechat.ui.GuideActivity;
 import cn.ucai.superwechat.ui.LoginActivity;
@@ -68,12 +68,16 @@ public class MFGT {
     }
 
     public static void gotoFirent(Activity activity, User user) {
-        startActivity(activity, new Intent(activity, FriendProfileActivity.class)
-                .putExtra(I.User.USER_NAME, user));
+        startActivity(activity,new Intent(activity,FirentProfileActivity.class)
+                .putExtra(I.User.TABLE_NAME,user));
+    }
+    public static void gotoFirent(Activity activity, String username) {
+        startActivity(activity,new Intent(activity,FriendProfileActivity.class)
+                .putExtra(I.User.USER_NAME,username));
     }
 
     public static void gotoAddFirent(Activity activity, String userName) {
-        startActivity(activity, new Intent(activity, AddFirentActivity.class)
-                .putExtra(I.User.USER_NAME, userName));
+        startActivity(activity,new Intent(activity,FriendProfileActivity.class)
+                .putExtra(I.User.USER_NAME,userName));
     }
 }
