@@ -13,10 +13,10 @@
  */
 package cn.ucai.superwechat.db;
 
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
+
+import java.util.List;
 
 import cn.ucai.superwechat.domain.InviteMessage;
 
@@ -26,19 +26,23 @@ public class InviteMessgeDao {
 	static final String COLUMN_NAME_FROM = "username";
 	static final String COLUMN_NAME_GROUP_ID = "groupid";
 	static final String COLUMN_NAME_GROUP_Name = "groupname";
-	
+	static final String COLUMN_NAME_NICKNAME = "nick_name";
+	static final String COLUMN_NAME_AVATAR_SUFFIX = "avatar_suffix";
+	static final String COLUMN_NAME_AVATAR_TIME = "avatar_last_update_time";
+
+
 	static final String COLUMN_NAME_TIME = "time";
 	static final String COLUMN_NAME_REASON = "reason";
 	public static final String COLUMN_NAME_STATUS = "status";
 	static final String COLUMN_NAME_ISINVITEFROMME = "isInviteFromMe";
 	static final String COLUMN_NAME_GROUPINVITER = "groupinviter";
-	
+
 	static final String COLUMN_NAME_UNREAD_MSG_COUNT = "unreadMsgCount";
-	
-		
+
+
 	public InviteMessgeDao(Context context){
 	}
-	
+
 	/**
 	 * save message
 	 * @param message
@@ -47,16 +51,16 @@ public class InviteMessgeDao {
 	public Integer saveMessage(InviteMessage message){
 		return SuperWeChatDBManager.getInstance().saveMessage(message);
 	}
-	
+
 	/**
 	 * update message
 	 * @param msgId
 	 * @param values
 	 */
 	public void updateMessage(int msgId,ContentValues values){
-	    SuperWeChatDBManager.getInstance().updateMessage(msgId, values);
+		SuperWeChatDBManager.getInstance().updateMessage(msgId, values);
 	}
-	
+
 	/**
 	 * get messges
 	 * @return
@@ -64,16 +68,16 @@ public class InviteMessgeDao {
 	public List<InviteMessage> getMessagesList(){
 		return SuperWeChatDBManager.getInstance().getMessagesList();
 	}
-	
+
 	public void deleteMessage(String from){
-	    SuperWeChatDBManager.getInstance().deleteMessage(from);
+		SuperWeChatDBManager.getInstance().deleteMessage(from);
 	}
-	
+
 	public int getUnreadMessagesCount(){
-	    return SuperWeChatDBManager.getInstance().getUnreadNotifyCount();
+		return SuperWeChatDBManager.getInstance().getUnreadNotifyCount();
 	}
-	
+
 	public void saveUnreadMessageCount(int count){
-	    SuperWeChatDBManager.getInstance().setUnreadNotifyCount(count);
+		SuperWeChatDBManager.getInstance().setUnreadNotifyCount(count);
 	}
 }
