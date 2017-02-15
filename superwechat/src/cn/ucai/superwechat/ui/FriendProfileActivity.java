@@ -23,7 +23,7 @@ import cn.ucai.superwechat.utils.MFGT;
 import cn.ucai.superwechat.utils.ResultUtils;
 
 public class FriendProfileActivity extends BaseActivity {
-    private static final String TAG = FirentProfileActivity.class.getSimpleName();
+    private static final String TAG = FriendProfileActivity.class.getSimpleName();
 
     @BindView(R.id.img_back)
     ImageView mImgBack;
@@ -46,7 +46,7 @@ public class FriendProfileActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_firent_profile);
+        setContentView(R.layout.activity_friend_profile);
         ButterKnife.bind(this);
         initData();
     }
