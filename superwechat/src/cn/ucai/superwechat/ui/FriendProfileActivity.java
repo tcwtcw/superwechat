@@ -56,14 +56,14 @@ public class FriendProfileActivity extends BaseActivity {
         mTxtTitle.setVisibility(View.VISIBLE);
         mTxtTitle.setText(R.string.userinfo_txt_profile);
         user = (User) getIntent().getSerializableExtra(I.User.TABLE_NAME);
-        L.e(TAG,"user="+user);
-        if (user!=null){
+        L.e(TAG, "user=" + user);
+        if (user != null) {
             showUserInfo();
-        }else{
+        } else {
             String username = getIntent().getStringExtra(I.User.USER_NAME);
-            if (username==null) {
+            if (username == null) {
                 MFGT.finish(this);
-            }else{
+            } else {
                 syncUserInfo(username);
             }
         }
@@ -73,12 +73,12 @@ public class FriendProfileActivity extends BaseActivity {
         NetDao.getUserInfoByUsername(this, username, new OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
-                if (s!=null){
+                if (s != null) {
                     Result result = ResultUtils.getResultFromJson(s, User.class);
-                    if (result!=null){
-                        if (result.isRetMsg()){
+                    if (result != null) {
+                        if (result.isRetMsg()) {
                             User u = (User) result.getRetData();
-                            if (u!=null){
+                            if (u != null) {
                                 user = u;
                                 showUserInfo();
                             }
@@ -96,21 +96,21 @@ public class FriendProfileActivity extends BaseActivity {
 
     private void showUserInfo() {
         mTvUserinfoNick.setText(user.getMUserNick());
-        EaseUserUtils.setAppUserAvatarByPath(this,user.getAvatar(),mProfileImage);
-        mTvUserinfoName.setText("微信号: "+ user.getMUserName());
-        if (isFirent()){
+        EaseUserUtils.setAppUserAvatarByPath(this, user.getAvatar(), mProfileImage);
+        mTvUserinfoName.setText("微信号: " + user.getMUserName());
+        if (isFirent()) {
             mBtnSendMsg.setVisibility(View.VISIBLE);
             mBtnSendVideo.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             mBtnAddContact.setVisibility(View.VISIBLE);
         }
     }
 
-    private boolean isFirent(){
+    private boolean isFirent() {
         User u = SuperWeChatHelper.getInstance().getAppContactList().get(user.getMUserName());
-        if (u==null){
+        if (u == null) {
             return false;
-        }else{
+        } else {
             SuperWeChatHelper.getInstance().saveAppContact(user);
             return true;
         }
@@ -122,7 +122,13 @@ public class FriendProfileActivity extends BaseActivity {
     }
 
     @OnClick(R.id.btn_add_contact)
-    public void sendAddContactMsg(){
-        MFGT.gotoAddFirent(this,user.getMUserName());
+    public void sendAddContactMsg() {
+        MFGT.gotoAddFirent(this, user.getMUserName());
     }
+
+    @OnClick(R.id.btn_send_msg)
+    public void sendMsg() {
+        MFGT.gotoChat(this,user.getMUserName());
+    }
+
 }
