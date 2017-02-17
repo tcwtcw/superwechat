@@ -38,9 +38,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupManager.EMGroupOptions;
 import com.hyphenate.chat.EMGroupManager.EMGroupStyle;
 import com.hyphenate.easeui.domain.Group;
-import com.hyphenate.easeui.domain.User;
 import com.hyphenate.easeui.utils.EaseImageUtils;
-import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.exceptions.HyphenateException;
 
@@ -137,7 +135,7 @@ public class NewGroupActivity extends BaseActivity {
         }
     }
 
-    private void createEMGroup(final Intent data) {
+    private void createEMGroup(final Intent data){
         String st1 = getResources().getString(R.string.Is_to_create_a_group_chat);
         final String st2 = getResources().getString(R.string.Failed_to_create_groups);
         //new group
@@ -152,6 +150,7 @@ public class NewGroupActivity extends BaseActivity {
                 final String groupName = groupNameEditText.getText().toString().trim();
                 String desc = introductionEditText.getText().toString();
                 String[] members = data.getStringArrayExtra("newmembers");
+                L.e(TAG,"members="+members);
                 try {
                     EMGroupOptions option = new EMGroupOptions();
                     option.maxUsers = 200;
@@ -166,7 +165,7 @@ public class NewGroupActivity extends BaseActivity {
                     }
                     EMGroup group = EMClient.getInstance().groupManager().createGroup(groupName, desc, members, reason, option);
                     String hxid = group.getGroupId();
-                    createAppGroup(group);
+                    createAppGroup(group,members);
                 } catch (final HyphenateException e) {
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -180,15 +179,21 @@ public class NewGroupActivity extends BaseActivity {
         }).start();
     }
 
-    private void createAppGroup(EMGroup group) {
+    private void createAppGroup(final EMGroup group,final String[] members) {
+        L.e(TAG,"file="+file);
         NetDao.createGroup(this, group, file, new OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
+                L.e(TAG, "s=" + s);
                 if (s != null) {
                     Result result = ResultUtils.getResultFromJson(s, Group.class);
                     if (result != null) {
                         if (result.isRetMsg()) {
-                            createGroupSuccess();
+                            if (members!=null && members.length>0){
+                                addGroupMembers(group.getGroupId(),members);
+                            }else{
+                                createGroupSuccess();
+                            }
                         } else {
                             progressDialog.dismiss();
                             if (result.getRetCode() == I.MSG_GROUP_HXID_EXISTS) {
@@ -205,15 +210,58 @@ public class NewGroupActivity extends BaseActivity {
             @Override
             public void onError(String error) {
                 progressDialog.dismiss();
+                L.e(TAG, "error=" + error);
                 CommonUtils.showShortToast(R.string.Failed_to_create_groups);
             }
         });
     }
 
+    private void addGroupMembers(String hxid,String[] members) {
+        NetDao.addGroupMembers(this, getGroupMemebers(members), hxid,
+                new OnCompleteListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        L.e(TAG, "s=" + s);
+                        progressDialog.dismiss();
+                        boolean success = false;
+                        if (s != null) {
+                            Result result = ResultUtils.getResultFromJson(s, Group.class);
+                            if (result != null && result.isRetMsg()) {
+                                success = true;
+                                createGroupSuccess();
+                            }
+                        }
+                        if (!success){
+                            CommonUtils.showShortToast(R.string.Failed_to_create_groups);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        progressDialog.dismiss();
+                        L.e(TAG, "error=" + error);
+                        CommonUtils.showShortToast(R.string.Failed_to_create_groups);
+                    }
+                });
+    }
+
+    private String getGroupMemebers(String[] members) {
+        String membersStr = "";
+        if (members.length>0){
+            for (String s:members){
+                membersStr += s+",";
+            }
+        }
+        L.e(TAG,"getGroupMemebers,s="+membersStr);
+        return membersStr;
+    }
+
     private void createGroupSuccess() {
         runOnUiThread(new Runnable() {
             public void run() {
-                progressDialog.dismiss();
+                if (progressDialog!=null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
                 setResult(RESULT_OK);
                 finish();
             }
@@ -270,9 +318,10 @@ public class NewGroupActivity extends BaseActivity {
             Bitmap bitmap = extras.getParcelable("data");
             Drawable drawable = new BitmapDrawable(getResources(), bitmap);
             mIvAvatar.setImageDrawable(drawable);
-            String imagePath = EaseImageUtils.getImagePath(EMClient.getInstance().getCurrentUser() + I.AVATAR_SUFFIX_JPG);
+
+            String imagePath = EaseImageUtils.getImagePath(EMClient.getInstance().getCurrentUser()+ I.AVATAR_SUFFIX_JPG);
             file = new File(imagePath);//将要保存图片的路径
-            L.e("file path=" + file.getAbsolutePath());
+            L.e("file path="+file.getAbsolutePath());
             try {
                 BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);

@@ -769,33 +769,35 @@ public class SuperWeChatHelper {
      * @param msg
      */
     private void notifyNewInviteMessage(final InviteMessage msg){
-        L.e(TAG,"notifyNewInviteMessage...");
+        L.e(TAG,"notifyNewInviteMessage...msg="+msg);
         if(inviteMessgeDao == null){
             inviteMessgeDao = new InviteMessgeDao(appContext);
         }
-        NetDao.getUserInfoByUsername(appContext, msg.getFrom(), new OnCompleteListener<String>() {
-            public void onSuccess(String s) {
-                if (s!=null){
-                    Result result = ResultUtils.getResultFromJson(s, User.class);
-                    if (result!=null){
-                        if (result.isRetMsg()){
-                            User user = (User) result.getRetData();
-                            if (user!=null){
-                                msg.setUsernick(user.getMUserNick());
-                                msg.setAvatarSuffix(user.getMAvatarSuffix());
-                                msg.setAvatarTime(user.getMAvatarLastUpdateTime());
+        if (msg.getGroupId()==null) {
+            NetDao.getUserInfoByUsername(appContext, msg.getFrom(), new OnCompleteListener<String>() {
+                public void onSuccess(String s) {
+                    if (s != null) {
+                        Result result = ResultUtils.getResultFromJson(s, User.class);
+                        if (result != null) {
+                            if (result.isRetMsg()) {
+                                User user = (User) result.getRetData();
+                                if (user != null) {
+                                    msg.setUsernick(user.getMUserNick());
+                                    msg.setAvatarSuffix(user.getMAvatarSuffix());
+                                    msg.setAvatarTime(user.getMAvatarLastUpdateTime());
+                                }
                             }
                         }
                     }
+                    inviteMessgeDao.saveMessage(msg);
                 }
-                inviteMessgeDao.saveMessage(msg);
-            }
 
-            @Override
-            public void onError(String error) {
-                inviteMessgeDao.saveMessage(msg);
-            }
-        });
+                @Override
+                public void onError(String error) {
+                    inviteMessgeDao.saveMessage(msg);
+                }
+            });
+        }
         //increase the unread message count
         inviteMessgeDao.saveUnreadMessageCount(1);
         // notify there is new message
@@ -1185,26 +1187,23 @@ public class SuperWeChatHelper {
     }
 
     public void asyncFetchContactsFromServer(final EMValueCallBack<List<String>> callback){
-        L.e(TAG,"asyncFetchContactsFromServer,isSyncingContactsWithServer="+isSyncingContactsWithServer);
         if(isSyncingContactsWithServer){
             return;
         }
 
         isSyncingContactsWithServer = true;
-        L.e(TAG,"asyncFetchContactsFromServer,isLoggedIn="+isLoggedIn());
 
-        if (isLoggedIn()) {
+        if (isLoggedIn()){
             NetDao.loadContact(appContext, EMClient.getInstance().getCurrentUser(),
                     new OnCompleteListener<String>() {
                         @Override
                         public void onSuccess(String s) {
-                            L.e(TAG,"asyncFetchContactsFromServer,s="+isSyncingContactsWithServer);
-
                             if (s!=null){
                                 Result result = ResultUtils.getListResultFromJson(s, User.class);
                                 if (result!=null && result.isRetMsg()){
                                     List<User> list = (List<User>) result.getRetData();
                                     if (list!=null && list.size()>0){
+                                        L.e(TAG,"list.size="+list.size());
                                         Map<String, User> userMap = new HashMap<String, User>();
                                         for (User u : list) {
                                             EaseCommonUtils.setAppUserInitialLetter(u);
@@ -1227,7 +1226,6 @@ public class SuperWeChatHelper {
 
                         }
                     });
-
         }
 
         new Thread(){
@@ -1243,7 +1241,6 @@ public class SuperWeChatHelper {
                         notifyContactsSyncListener(false);
                         return;
                     }
-
 
                     Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
                     for (String username : usernames) {
