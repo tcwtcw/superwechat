@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.domain.User;
 
 import cn.ucai.superwechat.I;
@@ -25,31 +26,31 @@ import cn.ucai.superwechat.ui.UserProfileActivity;
  */
 
 public class MFGT {
-    public static void finish(Activity activity){
+    public static void finish(Activity activity) {
         activity.finish();
-        activity.overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
+        activity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
-    public static void startActivity(Activity context, Class<?> clz){
+    public static void startActivity(Activity context, Class<?> clz) {
         context.startActivity(new Intent(context, clz));
-        context.overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
+        context.overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
     }
 
-    public static void startActivity(Activity context, Intent intent){
+    public static void startActivity(Activity context, Intent intent) {
         context.startActivity(intent);
-        context.overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
+        context.overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
     }
 
-    public static void gotoLogin(Activity activity){
+    public static void gotoLogin(Activity activity) {
         startActivity(activity, LoginActivity.class);
     }
 
-    public static void gotoLoginCleanTask(Activity activity){
-        startActivity(activity, new Intent(activity,LoginActivity.class)
+    public static void gotoLoginCleanTask(Activity activity) {
+        startActivity(activity, new Intent(activity, LoginActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
-    public static void gotoRegister(Activity activity){
+    public static void gotoRegister(Activity activity) {
         startActivity(activity, RegisterActivity.class);
     }
 
@@ -65,26 +66,31 @@ public class MFGT {
         startActivity(activity, UserProfileActivity.class);
     }
 
-    public static void gotoAddContact(Activity activity){
+    public static void gotoAddContact(Activity activity) {
         startActivity(activity, AddContactActivity.class);
     }
 
     public static void gotoFirent(Activity activity, User user) {
-        startActivity(activity,new Intent(activity,FriendProfileActivity.class)
-                .putExtra(I.User.TABLE_NAME,user));
+        startActivity(activity, new Intent(activity, FriendProfileActivity.class)
+                .putExtra(I.User.TABLE_NAME, user));
     }
+
     public static void gotoFirent(Activity activity, String username) {
-        startActivity(activity,new Intent(activity,FriendProfileActivity.class)
-                .putExtra(I.User.USER_NAME,username));
+        if (username.equals(EMClient.getInstance().getCurrentUser())) {
+            gotoUserProfile(activity);
+        } else {
+            startActivity(activity, new Intent(activity, FriendProfileActivity.class)
+                    .putExtra(I.User.USER_NAME, username));
+        }
     }
 
     public static void gotoAddFirent(Activity activity, String username) {
-        startActivity(activity,new Intent(activity,AddFirentActivity.class)
-                .putExtra(I.User.USER_NAME,username));
+        startActivity(activity, new Intent(activity, AddFirentActivity.class)
+                .putExtra(I.User.USER_NAME, username));
     }
 
     public static void gotoChat(Activity activity, String username) {
-        startActivity(activity,new Intent(activity, ChatActivity.class)
+        startActivity(activity, new Intent(activity, ChatActivity.class)
                 .putExtra("userId", username));
     }
 
